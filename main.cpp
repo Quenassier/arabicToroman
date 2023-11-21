@@ -2,81 +2,99 @@
 #include <map>
 #include <string>
 
-std::map<std::string, int> romanToArabicMap;
+std::map<char, int> romanToArabicMap;
 std::map<int, std::string> arabicToRomanMap;
 
-void initializeMaps()
-{
-    std::string romanNumerals[] = { "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
-    int arabicNumerals[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+void initializeMaps() {
+    romanToArabicMap['I'] = 1;
+    romanToArabicMap['V'] = 5;
+    romanToArabicMap['X'] = 10;
+    romanToArabicMap['L'] = 50;
+    romanToArabicMap['C'] = 100;
+    romanToArabicMap['D'] = 500;
+    romanToArabicMap['M'] = 1000;
 
-    for (int i = 0; i < 10; ++i)
-{
-    romanToArabicMap[romanNumerals[i]] = arabicNumerals[i];
-    arabicToRomanMap[arabicNumerals[i]] = romanNumerals[i];
-}
-}
-
-int convertRomanToArabic(const std::string& romanNumeral)
-{
-    auto it = romanToArabicMap.find(romanNumeral);
-    if (it != romanToArabicMap.end())
-{
-    return it->second;
+    arabicToRomanMap[1] = "I";
+    arabicToRomanMap[5] = "V";
+    arabicToRomanMap[10] = "X";
+    arabicToRomanMap[50] = "L";
+    arabicToRomanMap[100] = "C";
+    arabicToRomanMap[500] = "D";
+    arabicToRomanMap[1000] = "M";
 }
 
-    std::cerr << "неправильное римское число" << std::endl;
-    return -1;
+int convertRomanToArabic(const std::string& romanNumeral) {
+    int result = 0;
+    int prevValue = 0;
+
+    for (char c : romanNumeral) {
+        int currValue = romanToArabicMap[c];
+        result += currValue;
+
+        if (prevValue < currValue) {
+            result = result - (2 * prevValue);
+        }
+
+        prevValue = currValue;
+    }
+
+    return result;
 }
 
-std::string convertArabicToRoman(int arabicNumeral)
-{
-    auto it = arabicToRomanMap.find(arabicNumeral);
-    if (it != arabicToRomanMap.end())
-{
-    return it->second;
+std::string convertArabicToRoman(int arabicValue) {
+    std::map<int, std::string> arabicToRomanMap;
+    romanToArabicMap['I'] = 1;
+    romanToArabicMap['V'] = 5;
+    romanToArabicMap['X'] = 10;
+    romanToArabicMap['L'] = 50;
+    romanToArabicMap['C'] = 100;
+    romanToArabicMap['D'] = 500;
+    romanToArabicMap['M'] = 1000;
+
+    int result = 0;
+    int current = 0, prev = 0;
+std::string number = std::to_string(arabicValue);
+    for (int i = 0; i < number.length(); i++) {
+        prev = current;
+        current = romanToArabicMap[number[i]];
+        result += current;
+        if (prev < current) {
+            result -= 2 * prev;
+        }
+    }
+
+    std::cout << result;
+    return 0;
 }
 
-    std::cerr << "неправильное арабское число" << arabicNumeral << std::endl;
-    return "";
-}
-
-int main()
-{
+int main() {
     initializeMaps();
     setlocale(LC_ALL, "RUS");
+
     std::string type, num;
-    std::cout << "введите ваше число (roman или arabic): ";
+    std::cout << "Введите тип числа (roman или arabic): ";
     std::cin >> type;
+    int arabicValue; 
 
-if (type[0] == 'r')
-{
-    std::cout << "введите римское число: ";
-    std::cin >> num;
+    if (type == "roman") {
+        std::cout << "Введите римское число: ";
+        std::cin >> num;
 
-    int arabicValue = convertRomanToArabic(num);
-if (arabicValue != -1)
-{
-            std::cout << "арабское число: " << arabicValue << std::endl;
-}
-}
-else if (type[0] == 'a')
-{
-    int arabicValue;
-    std::cout << "введите арабское число: ";
-    std::cin >> arabicValue;
+        int arabicValue = convertRomanToArabic(num);
+        if (arabicValue != 0) {
+            std::cout << "Арабское число: " << arabicValue << std::endl;
+        } else {
+            std::cout << "Неправильное римское число" << std::endl;
+        }
+    } else if (type == "arabic") {
+        std::cout << "Введите арабское число: ";
+        std::cin >> arabicValue;
 
-    std::string romanNumeral = convertArabicToRoman(arabicValue);
-    if (!romanNumeral.empty())
-{
-            std::cout << "римское число: " << romanNumeral << std::endl;
-}
-}
-else
-{
-    std::cerr << "неверный ввод, используйте арабский или римский" << std::endl;
-    return 1;
-}
-
+       std::string romanNumeral = convertArabicToRoman(arabicValue);
+        std::cout << "Римское число: " << romanNumeral << std::endl;
+    } else {
+        std::cout << "Неверный ввод, используйте арабский или римский" << std::endl;
+        return 1;
+    }
     return 0;
 }
