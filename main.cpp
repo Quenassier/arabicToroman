@@ -42,39 +42,38 @@ int convertRomanToArabic(const std::string& romanNumeral) {
 }
 
 std::string convertArabicToRoman(int arabicValue) {
-    std::map<int, std::string> arabicToRomanMap;
-    romanToArabicMap['I'] = 1;
-    romanToArabicMap['V'] = 5;
-    romanToArabicMap['X'] = 10;
-    romanToArabicMap['L'] = 50;
-    romanToArabicMap['C'] = 100;
-    romanToArabicMap['D'] = 500;
-    romanToArabicMap['M'] = 1000;
+    std::string romanNumeral; 
+        
+    std::map<int, std::string> arabicToRomanMap{
+    {1, "I"}, 
+    {5, "V"}, 
+    {10, "X"},
+    {50, "L"}, 
+    {100, "C"}, 
+    {500, "D"}, 
+    {1000, "M"}
+    };
 
-    int result = 0;
-    int current = 0, prev = 0;
-std::string number = std::to_string(arabicValue);
-    for (int i = 0; i < number.length(); i++) {
-        prev = current;
-        current = romanToArabicMap[number[i]];
-        result += current;
-        if (prev < current) {
-            result -= 2 * prev;
+    for (auto it = arabicToRomanMap.rbegin(); it != arabicToRomanMap.rend(); ++it) {
+        while (arabicValue >= it->first) {
+            romanNumeral += it->second;
+            arabicValue -= it->first;
         }
     }
 
-    std::cout << result;
-    return 0;
+
+    return romanNumeral;
 }
+
 
 int main() {
     initializeMaps();
     setlocale(LC_ALL, "RUS");
 
     std::string type, num;
-    std::cout << "Введите тип числа (roman или arabic): ";
+    std::cout << "Введите числа (roman или arabic): ";
     std::cin >> type;
-    int arabicValue; 
+    int arabicValue;
 
     if (type == "roman") {
         std::cout << "Введите римское число: ";
@@ -83,16 +82,19 @@ int main() {
         int arabicValue = convertRomanToArabic(num);
         if (arabicValue != 0) {
             std::cout << "Арабское число: " << arabicValue << std::endl;
-        } else {
+        }
+        else {
             std::cout << "Неправильное римское число" << std::endl;
         }
-    } else if (type == "arabic") {
+    }
+    else if (type == "arabic") {
         std::cout << "Введите арабское число: ";
         std::cin >> arabicValue;
 
-       std::string romanNumeral = convertArabicToRoman(arabicValue);
+        std::string romanNumeral = convertArabicToRoman(arabicValue);
         std::cout << "Римское число: " << romanNumeral << std::endl;
-    } else {
+    }
+    else {
         std::cout << "Неверный ввод, используйте арабский или римский" << std::endl;
         return 1;
     }
