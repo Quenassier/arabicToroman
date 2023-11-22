@@ -14,13 +14,19 @@ void initializeMaps() {
     romanToArabicMap['D'] = 500;
     romanToArabicMap['M'] = 1000;
 
-    arabicToRomanMap[1] = "I";
-    arabicToRomanMap[5] = "V";
-    arabicToRomanMap[10] = "X";
-    arabicToRomanMap[50] = "L";
-    arabicToRomanMap[100] = "C";
-    arabicToRomanMap[500] = "D";
     arabicToRomanMap[1000] = "M";
+    arabicToRomanMap[900] = "CM";
+    arabicToRomanMap[500] = "D";
+    arabicToRomanMap[400] = "CD";
+    arabicToRomanMap[100] = "C";
+    arabicToRomanMap[90] = "XC";
+    arabicToRomanMap[50] = "L";
+    arabicToRomanMap[40] = "XL";
+    arabicToRomanMap[10] = "X";
+    arabicToRomanMap[9] = "IX";
+    arabicToRomanMap[5] = "V";
+    arabicToRomanMap[4] = "IV";
+    arabicToRomanMap[1] = "I";
 }
 
 int convertRomanToArabic(const std::string& romanNumeral) {
@@ -29,12 +35,12 @@ int convertRomanToArabic(const std::string& romanNumeral) {
 
     for (char c : romanNumeral) {
         int currValue = romanToArabicMap[c];
-        result += currValue;
 
         if (prevValue < currValue) {
-            result = result - (2 * prevValue);
+            result -= 2 * prevValue;
         }
 
+        result += currValue;
         prevValue = currValue;
     }
 
@@ -42,17 +48,7 @@ int convertRomanToArabic(const std::string& romanNumeral) {
 }
 
 std::string convertArabicToRoman(int arabicValue) {
-    std::string romanNumeral; 
-        
-    std::map<int, std::string> arabicToRomanMap{
-    {1, "I"}, 
-    {5, "V"}, 
-    {10, "X"},
-    {50, "L"}, 
-    {100, "C"}, 
-    {500, "D"}, 
-    {1000, "M"}
-    };
+    std::string romanNumeral;
 
     for (auto it = arabicToRomanMap.rbegin(); it != arabicToRomanMap.rend(); ++it) {
         while (arabicValue >= it->first) {
@@ -61,10 +57,8 @@ std::string convertArabicToRoman(int arabicValue) {
         }
     }
 
-
     return romanNumeral;
 }
-
 
 int main() {
     initializeMaps();
