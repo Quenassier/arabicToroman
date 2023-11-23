@@ -29,6 +29,8 @@ void initializeMaps() {
     arabicToRomanMap[1] = "I";
 }
 
+// 529 % 10 == 9 IX iter 1 53 % 10 2 50 - 30 = 20 != 10 XXX 5 % 10 = 5 3 5 * 10 * 10 D DXXX map[iter] - map[iter - 2] > map[iter - 2] == map[iter - 2] n раз 
+
 int convertRomanToArabic(const std::string& romanNumeral) {
     int result = 0;
     int prevValue = 0;
